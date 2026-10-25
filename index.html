@@ -504,7 +504,7 @@
     <section class="analogy-guide" aria-labelledby="analogy-title">
       <header class="analogy-guide-head">
         <h2 id="analogy-title">比喻对照表 <span class="en">Metaphor map</span></h2>
-        <p class="lead"><b>先问“像在哪”，再念一次女巫的升级咒。</b>每道魔咒都把初级比喻推深一层：不是惩罚，而是揭开技术真正多出来的那部分。能说出升级前后，再把故事翻译回技术，链接才真正建立。<span class="en"><b>First ask where the metaphor fits, then cast the witch’s upgrade spell.</b> Each spell moves the beginner’s picture one level deeper. It is not a punishment; it reveals what the real technology adds. Explain the before and after, then translate the story back into technology.</span></p>
+        <p class="lead"><b>先问“像在哪”，再念一次女巫的升级咒。</b>每道魔咒都把初级比喻推深一层：不是惩罚，而是揭开技术真正多出来的那部分。能说出升级前后，再把故事翻译回技术，链接才真正建立。<span class="en"><b>First ask where the metaphor fits, then cast the witch's upgrade spell.</b> Each spell moves the beginner's picture one level deeper. It is not a punishment; it reveals what the real technology adds. Explain the before and after, then translate the story back into technology.</span></p>
       </header>
       <div class="analogy-months" id="analogy-months"></div>
     </section>
@@ -841,9 +841,9 @@
         const rows=analogies.filter(a=>a.m===m.n).map(a=>`<article class="analogy-row">
           <div class="analogy-cell" data-label="比喻 → 技术 · Metaphor → tech"><strong>${a.metaphor} → ${a.tech}</strong></div>
           <div class="analogy-cell" data-label="像在哪 · Where it fits"><p>${a.fit}${en(a.fitEn)}</p></div>
-          <div class="analogy-cell break" data-label="女巫魔咒版 · The Witch’s Curse"><strong>${a.break}</strong>${en(a.breakEn)}</div>
+          <div class="analogy-cell break" data-label="女巫魔咒版 · The Witch's Curse"><strong>${a.break}</strong>${en(a.breakEn)}</div>
         </article>`).join('');
-        return `<section class="analogy-month" style="${monthStyle(m)}"><header class="analogy-month-title"><span class="mnum">MONTH ${m.n}</span><h3>${m.name}${en(m.en)}</h3></header><div class="analogy-table" role="table" aria-label="M${m.n} ${m.name}比喻对照"><div class="analogy-head" role="row"><div class="analogy-cell" role="columnheader">比喻 → 技术 · Metaphor → tech</div><div class="analogy-cell" role="columnheader">像在哪 · Where it fits</div><div class="analogy-cell" role="columnheader">女巫魔咒版 · The Witch’s Curse</div></div>${rows}</div></section>`;
+        return `<section class="analogy-month" style="${monthStyle(m)}"><header class="analogy-month-title"><span class="mnum">MONTH ${m.n}</span><h3>${m.name}${en(m.en)}</h3></header><div class="analogy-table" role="table" aria-label="M${m.n} ${m.name}比喻对照"><div class="analogy-head" role="row"><div class="analogy-cell" role="columnheader">比喻 → 技术 · Metaphor → tech</div><div class="analogy-cell" role="columnheader">像在哪 · Where it fits</div><div class="analogy-cell" role="columnheader">女巫魔咒版 · The Witch's Curse</div></div>${rows}</div></section>`;
       }).join('');
       document.getElementById('analogy-months').innerHTML=groups;
     }

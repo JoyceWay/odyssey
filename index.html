@@ -342,6 +342,10 @@
     .detail-cell h4{font:700 11px/1.3 var(--mono);letter-spacing:.08em;color:var(--route);margin:0 0 7px;text-transform:uppercase}
     .detail-cell p{font-size:13px;line-height:1.65;color:var(--muted);margin:0}
     .detail-cell.story-cell{background:var(--card-2)}
+    .aux-panel{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px;padding:16px 18px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+    .aux-panel .detail-cell{padding:0;border:0;background:transparent}
+    .aux-panel .detail-cell h4{font-size:10px;margin:0 0 5px}
+    .aux-panel .detail-cell p{font-size:12px;line-height:1.6}
     .resource-cell{grid-column:1/-1;border-right:0!important;border-bottom:0!important;background:color-mix(in srgb,var(--card-2) 42%,var(--card))}
     .resource-cell h4{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
     .resource-count{font:400 9px/1.4 var(--mono);letter-spacing:0;color:var(--faint)}
@@ -474,6 +478,8 @@
       details[open] summary:after{content:"－"}
       .detail-body{grid-template-columns:1fr}
       .detail-cell{border-right:0!important;border-bottom:1px solid var(--line)!important}
+      .aux-panel{grid-template-columns:1fr;padding:14px 16px}
+      .aux-panel .detail-cell{border-bottom:0!important}
       .detail-cell:last-child{border-bottom:0!important}
       .advice-grid{grid-template-columns:1fr}
     }
@@ -1060,7 +1066,7 @@
     function renderSix(){
       const filters=`<div class="filters" aria-label="筛选月份"><button class="month-filter active" data-month="all">全部 · All</button>${months.map(m=>`<button class="month-filter" data-month="${m.n}">M${m.n} ${m.name}</button>`).join('')}</div>`;
       const groups=months.map(m=>{
-        const ds=weeks.filter(w=>w.m===m.n).map((w,i)=>`<details ${i===0?'open':''} style="${monthStyle(m)}"><summary><span class="wk-no">W${String(w.n).padStart(2,'0')}</span><strong>${w.t}${en(w.e)}</strong><span class="route-inline"><span class="route-kicker">承接 · CONNECTION</span><span>${routeLines[w.n]||''}</span></span></summary><div class="detail-body">${detailCell('从零学什么','LEARN',w.aim)}${detailCell('对 AI 的意义','WHY AI',w.ai)}${detailCell('Prompt 在哪用','PROMPT',w.prompt)}${detailCell('这一周做出来','SHIP',w.out)}${detailCell('餐馆里的这一幕','STORY',w.story,'story-cell')}<div class="detail-cell"><h4>完成标准 · DONE</h4><p>你能不用术语，用自己的话解释；也能亲手跑通一次，并指出一个失败点。</p></div>${resourceCell(w.n)}${videoGuideCell(w.n)}<div class="stuck-line"><span class="route-kicker">卡点 · STUCK</span><span>本周卡点（踩到再写）</span></div></div></details>`).join('');
+        const ds=weeks.filter(w=>w.m===m.n).map((w,i)=>`<details ${i===0?'open':''} style="${monthStyle(m)}"><summary><span class="wk-no">W${String(w.n).padStart(2,'0')}</span><strong>${w.t}${en(w.e)}</strong><span class="route-inline"><span class="route-kicker">承接 · CONNECTION</span><span>${routeLines[w.n]||''}</span></span></summary><div class="detail-body"><div class="aux-panel">${detailCell('从零学什么','LEARN',w.aim)}${detailCell('对 AI 的意义','WHY AI',w.ai)}${detailCell('Prompt 在哪用','PROMPT',w.prompt)}${detailCell('这一周做出来','SHIP',w.out)}${detailCell('餐馆里的这一幕','STORY',w.story,'story-cell')}<div class="detail-cell"><h4>完成标准 · DONE</h4><p>你能不用术语，用自己的话解释；也能亲手跑通一次，并指出一个失败点。</p></div></div>${resourceCell(w.n)}${videoGuideCell(w.n)}<div class="stuck-line"><span class="route-kicker">卡点 · STUCK</span><span>本周卡点（踩到再写）</span></div></div></details>`).join('');
         return `<section class="full-month" data-month-group="${m.n}" style="${monthStyle(m)}"><header class="full-title"><span class="big-no">M${m.n}</span><h3>${m.name}${en(m.en+' · '+m.storyEn)}</h3></header>${m.n>1?`<div class="revisit-line"><span class="route-kicker">回访 · REVISIT</span><span>进 M${m.n} 之前，先回 M${m.n-1} 的 SHIP 里挑一个，改一处。</span></div>`:''}<div class="week-details">${ds}</div></section>`;
       }).join('');
       document.getElementById('six-view').innerHTML=`<header class="view-head"><div><h2>六个月，逐周精读、看讲义、动手</h2><p>每周先看不超过 3 个“必看”，其余都是真有需要才打开的“可选项”；再完成动手任务并按标准验收。Week 24 不加新视频，只整合作品。<span class="en">Each week has no more than three required items. Open optional resources only for a real need, then build and verify the result. Week 24 adds no new video and is reserved for portfolio integration.</span></p></div><span class="scale-tag">24 WEEKS · BUILD FIRST</span></header><div class="honest-total"><div><strong>约 26 小时</strong><span>必看视频 · required</span></div><div><strong>约 36 小时</strong><span>可选项视频 · optional</span></div><div><strong>约 155–185 小时</strong><span>含 92–122 小时动手；目标 480 小时，缺口不注水</span></div></div>${filters}${groups}`;

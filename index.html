@@ -236,7 +236,7 @@
     .study-day-label h4{font:600 18px/1.35 var(--serif);margin:6px 0 0}
     .study-day-label p{margin:4px 0 0;font-size:11px;color:var(--faint)}
     .study-resource-list{display:grid;gap:14px;margin:0;padding:0;list-style:none}
-    .study-resource{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:3px 12px;align-items:baseline}
+    .study-resource{display:grid;grid-template-columns:22px 58px minmax(0,1fr) auto;gap:3px 12px;align-items:baseline}
     .study-kind{font:500 9px/1.3 var(--mono);letter-spacing:.06em;color:var(--accent)}
     .study-resource a,.study-resource-title{font:600 14px/1.45 var(--sans)}
     .study-resource a{text-underline-offset:4px;text-decoration-thickness:1px}
@@ -433,7 +433,7 @@
       .study-head{grid-template-columns:1fr;gap:8px}
       .study-day{grid-template-columns:1fr;gap:14px}
       .study-day-label{padding:0 0 10px;border-right:0;border-bottom:2px solid var(--accent)}
-      .study-resource{grid-template-columns:50px minmax(0,1fr)}
+      .study-resource{grid-template-columns:22px 50px minmax(0,1fr)}
       .study-time{grid-column:2}
       .study-resource p{grid-column:2}
       .guide-head{grid-template-columns:1fr;gap:8px}
@@ -491,6 +491,11 @@
     .is-done{outline:2px solid var(--route);outline-offset:-2px}
     .is-done>summary strong,.is-done h3{opacity:.75}
 
+    .item-check{width:15px;height:15px;accent-color:var(--route);vertical-align:-2px;margin:0 8px 0 0;cursor:pointer;flex:none}
+    .study-check-slot{display:flex;align-items:flex-start;padding-top:3px}
+    .study-check-slot .item-check{margin:0}
+    .item-done a{opacity:.62}
+
   </style>
 </head>
 <body>
@@ -522,6 +527,7 @@
           <tr><td>1 周版 · 7 天侦察</td><td id="count-week"></td><td class="mini-bar"><div class="progress-bar"><div class="progress-fill" id="bar-week"></div></div></td><td><button class="go-btn" type="button" data-tab="week">去打卡 →</button></td></tr>
           <tr><td>1 月版 · 24 主题</td><td id="count-month"></td><td class="mini-bar"><div class="progress-bar"><div class="progress-fill" id="bar-month"></div></div></td><td><button class="go-btn" type="button" data-tab="month">去打卡 →</button></td></tr>
           <tr><td>6 月版 · 24 周</td><td id="count-six"></td><td class="mini-bar"><div class="progress-bar"><div class="progress-fill" id="bar-six"></div></div></td><td><button class="go-btn" type="button" data-tab="six">去打卡 →</button></td></tr>
+          <tr><td>资源单项 · 看完即勾</td><td id="count-item"></td><td class="mini-bar"><div class="progress-bar"><div class="progress-fill" id="bar-item"></div></div></td><td><button class="go-btn" type="button" data-tab="day">去打卡 →</button></td></tr>
         </tbody>
       </table>
     </section>
@@ -972,7 +978,7 @@
       }).join('');
       const studyRows=studyDays.map(d=>{
         const m=months[d.m-1];
-        const items=d.items.map(r=>{const links=normalizedUrls(r);const primary=links[0]||r.url;const domestic=primary&&isYouTubeUrl(primary)?`<div class="video-domestic">${domesticVideoOption(r)}</div>`:'';return `<li class="study-resource"><span class="study-kind">${r.kind}</span>${primary?`<a href="${primary}" target="_blank" rel="noopener">${r.title} ↗</a>`:`<span class="study-resource-title">${r.title}</span>`}<span class="study-time">${r.time}</span>${domestic}<p>${r.note}${en(r.noteEn)}</p></li>`}).join('');
+        const items=d.items.map(r=>{const links=normalizedUrls(r);const primary=links[0]||r.url;const domestic=primary&&isYouTubeUrl(primary)?`<div class="video-domestic">${domesticVideoOption(r)}</div>`:'';return `<li class="study-resource"><span class="study-check-slot"></span><span class="study-kind">${r.kind}</span>${primary?`<a href="${primary}" target="_blank" rel="noopener">${r.title} ↗</a>`:`<span class="study-resource-title">${r.title}</span>`}<span class="study-time">${r.time}</span>${domestic}<p>${r.note}${en(r.noteEn)}</p></li>`}).join('');
         return `<article class="study-day" style="${monthStyle(m)}"><header class="study-day-label"><span class="day-num">DAY ${d.d} · M${d.m}</span><h4>${d.title}${en(d.enTitle)}</h4><p>${d.time}</p></header><ul class="study-resource-list">${items}</ul></article>`;
       }).join('');
       const studySection=`<section class="week-study" aria-labelledby="week-study-title"><header class="study-head"><div><h3 id="week-study-title">一周 · 20 小时进阶学习清单${en('One-week · 20-hour deepening plan')}</h3><span class="study-total">6 STUDY DAYS · ABOUT 18–20 HOURS · FREE</span></div><p>这是短视频单之后的加深层。Day 1–Day 6 每天留约 3 小时：先看或读，再立刻动手；英文资料为主，全部免费。${en('This is the deeper layer after the short-video route. Reserve about three hours on Days 1–6: watch or read, then practice immediately. The resources are mainly in English and all free.')}</p></header><div class="study-days">${studyRows}</div><p class="study-foot"><b>Day 7 · 复盘：</b>不再输入新内容。关掉资料，默写六个月路线，标出 3 个卡点，再排正式学习顺序。${en('Day 7 · Review: add no new input. Close the resources, redraw the six-month route from memory, mark three sticking points, and set your full study order.')}</p></section>`;
@@ -1087,7 +1093,7 @@
     var KEY='odyssey-progress-v1';
     var store;
     try{ store=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ store={}; }
-    if(!store.day)store.day={}; if(!store.week)store.week={}; if(!store.month)store.month={}; if(!store.six)store.six={}; if(!store.checkins)store.checkins=[];
+    if(!store.day)store.day={}; if(!store.week)store.week={}; if(!store.month)store.month={}; if(!store.six)store.six={}; if(!store.checkins)store.checkins=[]; if(!store.item)store.item={};
     function save(){ try{ localStorage.setItem(KEY,JSON.stringify(store)); }catch(e){} }
     function todayStr(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
     function countDone(obj){ var n=0; for(var k in obj){ if(obj[k])n++; } return n; }
@@ -1110,10 +1116,37 @@
       var st=totals.six||24, sd=Math.min(done.six,st);
       setText('overall-text', sd+' / '+st+' 周');
       var of=document.getElementById('overall-fill'); if(of)of.style.width=Math.round(sd/st*100)+'%';
-      var btn=document.getElementById('checkin-btn');
+      function itemKeyOf(t){ return (t||'').replace(/\s+/g,' ').replace('↗','').trim(); }
+    document.querySelectorAll('.video-item, .study-resource, .guide-resource, .resource-item').forEach(function(container){
+      var title=null, slot=null;
+      if(container.classList.contains('video-item')){ title=container.querySelector('a'); }
+      else if(container.classList.contains('study-resource')){ slot=container.querySelector('.study-check-slot'); title=container.querySelector('a, .study-resource-title'); }
+      else if(container.classList.contains('guide-resource')){ var main=container.querySelector('.guide-resource-main'); title=main? main.querySelector('a, .plain-title') : null; }
+      else if(container.classList.contains('resource-item')){ var copy=container.querySelector('.resource-copy'); title=copy? copy.querySelector('a') : null; }
+      if(!title)return;
+      var key=itemKeyOf(title.textContent); if(!key)return;
+      if(container.querySelector('.item-check'))return;
+      var box=document.createElement('input'); box.type='checkbox'; box.className='item-check'; box.dataset.key=key; box.checked=!!store.item[key]; box.setAttribute('aria-label','看完打卡');
+      if(slot){ slot.appendChild(box); } else { title.parentNode.insertBefore(box,title); }
+      box.addEventListener('change',function(){
+        if(box.checked){ store.item[key]=true; } else { delete store.item[key]; }
+        save();
+        document.querySelectorAll('.item-check').forEach(function(b){
+          if(b.dataset.key===key){ b.checked=box.checked; var c=b.closest('.video-item, .study-resource, .guide-resource, .resource-item'); if(c)c.classList.toggle('item-done',box.checked); }
+        });
+        refresh();
+      });
+      container.classList.toggle('item-done',!!store.item[key]);
+    });
+    var btn=document.getElementById('checkin-btn');
       var today=todayStr(), checked=store.checkins.indexOf(today)>=0;
       if(btn){ btn.textContent=checked? '今日已打卡 ✓（再点取消）' : '今日打卡 ✓'; btn.classList.toggle('done',checked); }
       setText('checkin-meta','连续打卡 '+streak()+' 天 · 累计打卡 '+store.checkins.length+' 天');
+      var keys=[], seen={};
+      document.querySelectorAll('.item-check').forEach(function(b){ if(!seen[b.dataset.key]){ seen[b.dataset.key]=true; keys.push(b.dataset.key); } });
+      var idn=keys.filter(function(k){ return store.item[k]; }).length;
+      setText('count-item', keys.length? (idn+' / '+keys.length) : '—');
+      var ib=document.getElementById('bar-item'); if(ib)ib.style.width=(keys.length? Math.round(idn/keys.length*100):0)+'%';
     }
     function addCheck(el,group,id){
       if(el.querySelector(':scope > .od-check')||el.querySelector('.od-check[data-group="'+group+'"][data-id="'+id+'"]'))return;

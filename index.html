@@ -213,7 +213,7 @@
     .sprint-outcomes dd{margin:5px 0 0;font-size:13px;line-height:1.5;color:var(--muted)}
     .sprint-days{position:relative;display:grid;gap:12px;margin-left:52px}
     .sprint-days:before{content:"";position:absolute;top:20px;bottom:20px;left:-28px;width:2px;background:repeating-linear-gradient(180deg,var(--route) 0 8px,transparent 8px 14px);opacity:.55}
-    .sprint-day{position:relative;display:grid;grid-template-columns:185px minmax(0,1fr) minmax(210px,.72fr);gap:20px;padding:19px 20px;background:var(--card);border:1px solid var(--line);border-radius:4px 18px 4px 4px;box-shadow:0 8px 20px var(--shadow)}
+    .sprint-day{position:relative;display:grid;grid-template-columns:22px 185px minmax(0,1fr) minmax(210px,.72fr);gap:20px;padding:19px 20px;background:var(--card);border:1px solid var(--line);border-radius:4px 18px 4px 4px;box-shadow:0 8px 20px var(--shadow)}
     .sprint-day:before{content:"";position:absolute;left:-37px;top:23px;width:16px;height:16px;border-radius:50%;background:var(--accent,var(--route));box-shadow:0 0 0 5px var(--paper),0 0 0 6px var(--accent,var(--route))}
     .sprint-day-label{min-width:0}
     .sprint-day-label .day-num{font:500 10px/1.2 var(--mono);letter-spacing:.1em;color:var(--accent,var(--route))}
@@ -265,9 +265,12 @@
     .rhythm-step{padding:13px 14px;border-top:2px solid var(--route);background:var(--card);font-size:12px;color:var(--muted)}
     .rhythm-step b{display:block;color:var(--ink);font-size:13px;margin-bottom:3px}
     .chapter-days{grid-column:1/-1;display:grid;gap:9px;margin-top:4px}
-    .chapter-day{display:grid;grid-template-columns:66px minmax(0,1fr);gap:12px;padding:11px 0;border-top:1px solid var(--line)}
-    .chapter-day:first-child{border-top:2px solid var(--accent,var(--route))}
+    .chapter-day{display:grid;grid-template-columns:22px 66px minmax(0,1fr);gap:6px 12px;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:4px 18px 4px 4px}
     .day-code{font:500 10px/1.45 var(--mono);color:var(--accent,var(--route));letter-spacing:.04em}
+    .chapter-day .day-code{align-self:center}
+    .chapter-day .day-title{min-width:0;font:600 16px/1.35 var(--serif)}
+    .chapter-day .day-copy{grid-column:1/-1}
+    .chapter-day .day-copy p{font-size:13px}
     .day-copy b{display:block;font-size:13px;line-height:1.45;margin-bottom:4px}
     .day-copy p{margin:0;font-size:12px;line-height:1.62;color:var(--muted)}
     .day-copy p+p{margin-top:4px}
@@ -325,6 +328,8 @@
     .week-details{display:grid;gap:9px;margin-left:84px}
     details{background:var(--card);border:1px solid var(--line);border-radius:4px 16px 4px 4px;overflow:hidden}
     summary{display:grid;grid-template-columns:52px minmax(0,1fr) 110px;gap:14px;align-items:center;padding:14px 16px;cursor:pointer;list-style:none}
+    #six-view .week-details summary{grid-template-columns:22px 52px minmax(0,1fr) auto}
+    #six-view .week-details summary strong{min-width:0}
     summary::-webkit-details-marker{display:none}
     summary:after{content:"＋ 展开";justify-self:end;font:400 10px var(--mono);color:var(--faint)}
     details[open] summary:after{content:"－ 收起"}
@@ -374,8 +379,9 @@
       .day-route{grid-template-columns:1fr 1fr;gap:24px 14px}
       .day-route:before{display:none}
       .sprint-brief{grid-template-columns:1fr}
-      .sprint-day{grid-template-columns:155px minmax(0,1fr)}
-      .sprint-result{grid-column:2;padding:12px 0 0;border-left:0;border-top:1px solid var(--line)}
+      .sprint-day{grid-template-columns:22px minmax(0,1fr)}
+      .sprint-task,.sprint-result{grid-column:1/-1}
+      .sprint-result{padding:12px 0 0;border-left:0;border-top:1px solid var(--line)}
       .chapter-grid{grid-template-columns:1fr}
       .month-rhythm{grid-template-columns:repeat(2,minmax(0,1fr))}
       .advice-grid{grid-template-columns:1fr 1fr}
@@ -427,9 +433,9 @@
       .sprint-outcomes div:last-child{padding-bottom:0;border-bottom:0}
       .sprint-days{margin-left:28px}
       .sprint-days:before{left:-17px}
-      .sprint-day{grid-template-columns:1fr;gap:14px;padding:17px 15px}
+      .sprint-day{grid-template-columns:22px minmax(0,1fr);gap:14px;padding:17px 15px}
       .sprint-day:before{left:-25px;top:22px;width:14px;height:14px}
-      .sprint-result{grid-column:auto;padding:12px 0 0}
+      .sprint-result{grid-column:1/-1;padding:12px 0 0}
       .sprint-rule{grid-template-columns:1fr}
       .sprint-rule p{padding:14px 16px}
       .sprint-rule p+p{border-left:0;border-top:1px solid var(--line)}
@@ -455,13 +461,14 @@
       .chapter dl{grid-template-columns:1fr;gap:5px}
       .chapter dd{margin-bottom:8px}
       .month-rhythm{grid-template-columns:1fr}
-      .chapter-day{grid-template-columns:54px minmax(0,1fr);gap:9px}
+      .chapter-day{grid-template-columns:20px 54px minmax(0,1fr);gap:6px 9px;padding:14px 15px}
       .integration-card ol{grid-template-columns:1fr}
       .resource-item{grid-template-columns:44px minmax(0,1fr)}
       .full-title{grid-template-columns:52px 1fr}
       .full-title .big-no{font-size:20px}
       .week-details{margin-left:0}
       summary{grid-template-columns:42px minmax(0,1fr) 34px;padding:13px 12px;gap:8px}
+      #six-view .week-details summary{grid-template-columns:20px 42px minmax(0,1fr) auto}
       summary:after{content:"＋";font-size:15px}
       details[open] summary:after{content:"－"}
       .detail-body{grid-template-columns:1fr}
@@ -490,7 +497,7 @@
     .go-btn{font:600 13px/1 var(--sans);padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
     .od-check{width:18px;height:18px;accent-color:var(--route);cursor:pointer;flex:none}
     summary .od-check{vertical-align:-3px;margin-right:10px}
-    .chapter-day .od-check,.sprint-day .od-check{margin:2px 0 10px}
+    .chapter-day .od-check,.sprint-day .od-check{margin:2px 0 0}
     .is-done{outline:2px solid var(--route);outline-offset:-2px}
     .is-done>summary strong,.is-done h3{opacity:.75}
 
@@ -1033,7 +1040,7 @@
     function renderMonth(){
       const cards=months.map(m=>{
         const start=(m.n-1)*4+1;
-        const days=weeks.filter(w=>w.m===m.n).map((w,i)=>`<div class="chapter-day"><span class="day-code">DAY ${String(start+i).padStart(2,'0')}</span><div class="day-copy"><b>W${w.n} · ${w.t}${en(w.e)}</b><p><strong>学：</strong>${w.aim}</p><p><strong>做：</strong>${w.out}</p><p><strong>问 AI：</strong>${w.prompt}</p></div></div>`).join('');
+        const days=weeks.filter(w=>w.m===m.n).map((w,i)=>`<div class="chapter-day"><span class="day-code">DAY ${String(start+i).padStart(2,'0')}</span><b class="day-title">W${w.n} · ${w.t}${en(w.e)}</b><div class="day-copy"><p><strong>学：</strong>${w.aim}</p><p><strong>做：</strong>${w.out}</p><p><strong>问 AI：</strong>${w.prompt}</p></div></div>`).join('');
         return `<article class="chapter" style="${monthStyle(m)}"><div class="chapter-top"><div><span class="chapter-no">DAYS ${String(start).padStart(2,'0')}–${String(start+3).padStart(2,'0')} · CHAPTER ${m.n}</span><h3>${m.name}${en(m.en)}</h3></div><span class="stamp">M${m.n}</span></div><dl><dt>为什么学${en('Why')}</dt><dd>${m.why}${en(m.whyEn)}</dd><dt>阶段成果${en('Checkpoint')}</dt><dd>${m.checkpoint}${en(m.checkpointEn)}</dd><dd class="story"><b>餐馆这一章</b>${en('Restaurant chapter')}${m.chapterStory}${en(m.chapterStoryEn)}</dd><dd class="chapter-days">${days}</dd></dl></article>`;
       }).join('');
       const rhythm=`<div class="month-rhythm"><div class="rhythm-step"><b>第 1 周 · Days 1–7</b>M1 全部 + M2 前三站</div><div class="rhythm-step"><b>第 2 周 · Days 8–14</b>M2 收尾 + M3 + M4 前两站</div><div class="rhythm-step"><b>第 3 周 · Days 15–21</b>M4 收尾 + M5 + M6 方向一</div><div class="rhythm-step"><b>第 4 周 · Days 22–28</b>M6 方向二、三 + 四天整合项目</div></div>`;

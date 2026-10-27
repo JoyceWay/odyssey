@@ -249,22 +249,18 @@
     .study-foot b{color:var(--ink)}
 
     /* Month zoom */
-    .chapter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
-    .chapter{background:var(--card);border:1px solid var(--line);padding:25px;border-radius:5px 30px 5px 5px;box-shadow:0 12px 25px var(--shadow)}
-    .chapter-top{display:flex;justify-content:space-between;gap:18px;align-items:start}
-    .chapter-no{font:500 11px var(--mono);letter-spacing:.12em;color:var(--accent,var(--route))}
-    .chapter h3{font:600 23px/1.3 var(--serif);margin:5px 0 0}
-    .stamp{width:46px;height:46px;display:grid;place-items:center;border:1px solid var(--accent,var(--route));border-radius:50%;font:500 10px var(--mono);color:var(--accent,var(--route));transform:rotate(5deg)}
-    .chapter dl{margin:20px 0 0;display:grid;grid-template-columns:90px 1fr;gap:12px 14px;font-size:14px}
-    .chapter dt{font-weight:700;color:var(--ink)}
-    .chapter dd{margin:0;color:var(--muted)}
-    .chapter .story{grid-column:1/-1;padding:13px 14px;background:var(--card-2);color:var(--ink);border-radius:3px 14px 3px 3px}
-    .chapter-weeks{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--line)}
-    .chapter-weeks span{font:400 11px/1.4 var(--mono);border:1px solid var(--line);padding:5px 8px;border-radius:99px;color:var(--muted)}
+    .chapter-grid{display:grid;gap:34px}
+    .chapter{padding:28px 0 0;border-top:1px solid var(--line)}
+    .chapter-no{display:block;margin:0 0 6px;font:500 11px var(--mono);letter-spacing:.12em;color:var(--accent,var(--route))}
+    .chapter-why{margin:0 0 12px}
+    .chapter-why h4{font:700 11px/1.3 var(--mono);letter-spacing:.08em;color:var(--accent,var(--route));margin:0 0 7px;text-transform:uppercase}
+    .chapter-why p{margin:0;font-size:14px;line-height:1.62;color:var(--muted)}
+    .chapter-story{margin:0 0 16px;font-size:14px;line-height:1.62;color:var(--ink)}
+    .chapter-story b{margin-right:6px}
     .month-rhythm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 24px}
     .rhythm-step{padding:13px 14px;border-top:2px solid var(--route);background:var(--card);font-size:12px;color:var(--muted)}
     .rhythm-step b{display:block;color:var(--ink);font-size:13px;margin-bottom:3px}
-    .chapter-days{grid-column:1/-1;display:grid;gap:9px;margin-top:4px}
+    .chapter-days{display:grid;gap:12px}
     .chapter-day{display:grid;grid-template-columns:22px 66px minmax(0,1fr);gap:6px 12px;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:4px 18px 4px 4px}
     .day-code{font:500 10px/1.45 var(--mono);color:var(--accent,var(--route));letter-spacing:.04em}
     .chapter-day .day-code{align-self:center}
@@ -461,9 +457,8 @@
       .guide-practice{grid-template-columns:1fr}
       .guide-practice div{border-right:0;border-bottom:1px solid var(--line)}
       .guide-practice div:last-child{border-bottom:0}
-      .chapter{padding:20px 17px}
-      .chapter dl{grid-template-columns:1fr;gap:5px}
-      .chapter dd{margin-bottom:8px}
+      .chapter{padding:20px 0 0}
+
       .month-rhythm{grid-template-columns:1fr}
       .chapter-day{grid-template-columns:20px 54px minmax(0,1fr);gap:6px 9px;padding:14px 15px}
       .integration-card ol{grid-template-columns:1fr}
@@ -1045,7 +1040,7 @@
       const cards=months.map(m=>{
         const start=(m.n-1)*4+1;
         const days=weeks.filter(w=>w.m===m.n).map((w,i)=>`<div class="chapter-day"><span class="day-code">DAY ${String(start+i).padStart(2,'0')}</span><b class="day-title">W${w.n} · ${w.t}${en(w.e)}</b><div class="day-copy"><p><strong>学：</strong>${w.aim}</p><p><strong>做：</strong>${w.out}</p><p><strong>问 AI：</strong>${w.prompt}</p></div></div>`).join('');
-        return `<article class="chapter" style="${monthStyle(m)}"><div class="chapter-top"><div><span class="chapter-no">DAYS ${String(start).padStart(2,'0')}–${String(start+3).padStart(2,'0')} · CHAPTER ${m.n}</span><h3>${m.name}${en(m.en)}</h3></div><span class="stamp">M${m.n}</span></div><dl><dt>为什么学${en('Why')}</dt><dd>${m.why}${en(m.whyEn)}</dd><dt>阶段成果${en('Checkpoint')}</dt><dd>${m.checkpoint}${en(m.checkpointEn)}</dd><dd class="story"><b>餐馆这一章</b>${en('Restaurant chapter')}${m.chapterStory}${en(m.chapterStoryEn)}</dd><dd class="chapter-days">${days}</dd></dl></article>`;
+        return `<article class="chapter" style="${monthStyle(m)}"><span class="chapter-no">DAYS ${String(start).padStart(2,'0')}–${String(start+3).padStart(2,'0')} · CHAPTER ${m.n}</span><header class="full-title"><span class="big-no">M${m.n}</span><h3>${m.name}${en(m.en)}</h3></header><div class="chapter-why"><h4>为什么学 · WHY</h4><p>${m.why}${en(m.whyEn)}</p></div><div class="chapter-why"><h4>阶段成果 · CHECKPOINT</h4><p>${m.checkpoint}${en(m.checkpointEn)}</p></div><p class="chapter-story"><b>餐馆这一章</b>${en('Restaurant chapter')}${m.chapterStory}${en(m.chapterStoryEn)}</p><div class="chapter-days">${days}</div></article>`;
       }).join('');
       const rhythm=`<div class="month-rhythm"><div class="rhythm-step"><b>第 1 周 · Days 1–7</b>M1 全部 + M2 前三站</div><div class="rhythm-step"><b>第 2 周 · Days 8–14</b>M2 收尾 + M3 + M4 前两站</div><div class="rhythm-step"><b>第 3 周 · Days 15–21</b>M4 收尾 + M5 + M6 方向一</div><div class="rhythm-step"><b>第 4 周 · Days 22–28</b>M6 方向二、三 + 四天整合项目</div></div>`;
       const integration=`<article class="integration-card"><h3>Days 25–28 · 把 24 天串成一个能跑的系统${en('Integrate the 24 topics into one working system')}</h3><ol><li><b>Day 25：</b>回看依赖，补最卡的一处。</li><li><b>Day 26：</b>把 Prompt、工具、RAG 接成一条流程。</li><li><b>Day 27：</b>加测试、错误处理、成本记录。</li><li><b>Day 28：</b>整理 README、演示与下月复盘。</li></ol></article>`;

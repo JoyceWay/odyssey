@@ -197,6 +197,8 @@
     .video-item.practice>a:before{content:"动手对照 · ";font:500 9px/1.3 var(--mono);letter-spacing:.05em;color:var(--rust)}
     .video-domestic{grid-column:1/-1;display:flex;align-items:center;gap:8px;min-height:19px}
     .video-domestic a{font:500 10px/1.4 var(--mono);color:var(--rust)}
+    .video-title-wrap{min-width:0}
+    .video-item .domestic-link,.study-resource .domestic-link,.guide-resource-main .domestic-link{font:500 11px/1.4 var(--mono);color:var(--rust);white-space:nowrap;margin-left:8px}
     .bili-missing{font:400 10px/1.45 var(--mono);color:var(--faint)}
     .video-foot{margin:16px 0 0;padding:14px 16px;background:var(--card-2);font-size:13px;color:var(--muted)}
     .video-foot b{color:var(--ink)}
@@ -864,7 +866,12 @@
     function domesticVideoOption(item){
       const links=normalizedUrls(item);
       if(!links.length||!isYouTubeUrl(links[0]))return '';
-      return links[1]?`<a href="${links[1]}" target="_blank" rel="noopener">国内看 · B站 ↗</a>`:`<span class="bili-missing">暂无对版镜像，可在 B站 搜标题名</span>`;
+      return links[1]? '' : `<span class="bili-missing">暂无对版镜像，可在 B站 搜标题名</span>`;
+    }
+    function domesticInlineLink(item){
+      const links=normalizedUrls(item);
+      if(!links.length||!isYouTubeUrl(links[0])||!links[1])return '';
+      return ` <a class="domestic-link" href="${links[1]}" target="_blank" rel="noopener">中文版 ↗</a>`;
     }
 
     function renderManual(){
@@ -922,7 +929,7 @@
       ];
       const videos=videoDays.map(d=>{
         const m=months[d.m-1];
-        const items=d.items.map(v=>{const links=normalizedUrls(v);return `<li class="video-item${v.practice?' practice':''}"><a href="${links[0]}" target="_blank" rel="noopener">${v.title} ↗</a><span class="video-time">${v.time}</span><div class="video-domestic">${domesticVideoOption(v)}</div><p>${v.note}${en(v.noteEn)}</p></li>`}).join('');
+        const items=d.items.map(v=>{const links=normalizedUrls(v);const domestic=domesticVideoOption(v);return `<li class="video-item${v.practice?' practice':''}"><span class="video-title-wrap"><a href="${links[0]}" target="_blank" rel="noopener">${v.title} ↗</a>${domesticInlineLink(v)}</span><span class="video-time">${v.time}</span>${domestic?`<div class="video-domestic">${domestic}</div>`:''}<p>${v.note}${en(v.noteEn)}</p></li>`}).join('');
         return `<article class="video-day" style="${monthStyle(m)}"><header class="video-day-label"><span class="day-num">DAY ${d.d} · M${d.m}</span><h4>${d.title}${en(d.enTitle)}</h4><p>${d.time}</p></header><ul class="video-list">${items}</ul></article>`;
       }).join('');
       const videoSection=`<section class="day-videos" aria-labelledby="day-video-title"><header class="day-video-head"><div><h3 id="day-video-title">一小时视频单${en('One-hour video route')}</h3><span class="video-total">CORE LIST · ABOUT 50 MIN</span></div><p>按顺序看完，先走一遍 M1–M5 的主干。不要暂停抄笔记；每条只回答一个问题：“这项技术替我解决什么？”动手示范另计时长。${en('Watch in order for a first pass through Months 1–5. Do not pause to transcribe; answer one question after each video: “What problem does this technology solve for me?” The hands-on demonstration is extra.')}</p></header><div class="video-days">${videos}</div><p class="video-foot"><b>M6 · 选方向与作品：</b>不再加视频。对照产品工程、微调、自动化三条路各看一个真实案例；Day 7 关屏默写整张地图。${en('Month 6 · Direction and portfolio: add no more video. Compare one real case from product engineering, fine-tuning, and automation; on Day 7, close the screen and redraw the map from memory.')}</p></section>`;
@@ -979,7 +986,7 @@
       }).join('');
       const studyRows=studyDays.map(d=>{
         const m=months[d.m-1];
-        const items=d.items.map(r=>{const links=normalizedUrls(r);const primary=links[0]||r.url;const domestic=primary&&isYouTubeUrl(primary)?`<div class="video-domestic">${domesticVideoOption(r)}</div>`:'';return `<li class="study-resource"><span class="study-check-slot"></span><span class="study-kind">${r.kind}</span>${primary?`<a href="${primary}" target="_blank" rel="noopener">${r.title} ↗</a>`:`<span class="study-resource-title">${r.title}</span>`}<span class="study-time">${r.time}</span>${domestic}<p>${r.note}${en(r.noteEn)}</p></li>`}).join('');
+        const items=d.items.map(r=>{const links=normalizedUrls(r);const primary=links[0]||r.url;const domestic=primary&&isYouTubeUrl(primary)?domesticVideoOption(r):'';return `<li class="study-resource"><span class="study-check-slot"></span><span class="study-kind">${r.kind}</span>${primary?`<span class="video-title-wrap"><a href="${primary}" target="_blank" rel="noopener">${r.title} ↗</a>${domesticInlineLink(r)}</span>`:`<span class="study-resource-title">${r.title}</span>`}<span class="study-time">${r.time}</span>${domestic?`<div class="video-domestic">${domestic}</div>`:''}<p>${r.note}${en(r.noteEn)}</p></li>`}).join('');
         return `<article class="study-day" style="${monthStyle(m)}"><header class="study-day-label"><span class="day-num">DAY ${d.d} · M${d.m}</span><h4>${d.title}${en(d.enTitle)}</h4><p>${d.time}</p></header><ul class="study-resource-list">${items}</ul></article>`;
       }).join('');
       const studySection=`<section class="week-study" aria-labelledby="week-study-title"><header class="study-head"><div><h3 id="week-study-title">一周 · 20 小时进阶学习清单${en('One-week · 20-hour deepening plan')}</h3><span class="study-total">6 STUDY DAYS · ABOUT 18–20 HOURS · FREE</span></div><p>这是短视频单之后的加深层。Day 1–Day 6 每天留约 3 小时：先看或读，再立刻动手；英文资料为主，全部免费。${en('This is the deeper layer after the short-video route. Reserve about three hours on Days 1–6: watch or read, then practice immediately. The resources are mainly in English and all free.')}</p></header><div class="study-days">${studyRows}</div><p class="study-foot"><b>Day 7 · 复盘：</b>不再输入新内容。关掉资料，默写六个月路线，标出 3 个卡点，再排正式学习顺序。${en('Day 7 · Review: add no new input. Close the resources, redraw the six-month route from memory, mark three sticking points, and set your full study order.')}</p></section>`;
@@ -995,7 +1002,7 @@
     function guideItem(item){
       const links=normalizedUrls(item);
       const isVideo=links.length&&isYouTubeUrl(links[0]);
-      const title=links.length?`<a href="${links[0]}" target="_blank" rel="noopener">${item.name} ↗</a>`:`<span class="plain-title">${item.name}</span>`;
+      const title=links.length?`<a href="${links[0]}" target="_blank" rel="noopener">${item.name} ↗</a>${domesticInlineLink(item)}`:`<span class="plain-title">${item.name}</span>`;
       const domestic=isVideo?domesticVideoOption(item):'';
       const extraStart=isVideo?2:1;
       const extras=links.slice(extraStart).map((url,i)=>`<a href="${url}" target="_blank" rel="noopener">${i===0?'课程介绍':'补充链接 '+(i+1)} ↗</a>`).join('');
@@ -1120,7 +1127,7 @@
       function itemKeyOf(t){ return (t||'').replace(/\s+/g,' ').replace('↗','').trim(); }
     document.querySelectorAll('.video-item, .study-resource, .guide-resource, .resource-item').forEach(function(container){
       var title=null, slot=null;
-      if(container.classList.contains('video-item')){ title=container.querySelector('a'); }
+      if(container.classList.contains('video-item')){ title=container.querySelector('.video-title-wrap a')||container.querySelector('a'); }
       else if(container.classList.contains('study-resource')){ slot=container.querySelector('.study-check-slot'); title=container.querySelector('a, .study-resource-title'); }
       else if(container.classList.contains('guide-resource')){ var main=container.querySelector('.guide-resource-main'); title=main? main.querySelector('a, .plain-title') : null; }
       else if(container.classList.contains('resource-item')){ var copy=container.querySelector('.resource-copy'); title=copy? copy.querySelector('a') : null; }
@@ -1128,7 +1135,7 @@
       var key=itemKeyOf(title.textContent); if(!key)return;
       if(container.querySelector('.item-check'))return;
       var box=document.createElement('input'); box.type='checkbox'; box.className='item-check'; box.dataset.key=key; box.checked=!!store.item[key]; box.setAttribute('aria-label','看完打卡');
-      if(slot){ slot.appendChild(box); } else { title.parentNode.insertBefore(box,title); }
+      if(slot){ slot.appendChild(box); } else if(container.classList.contains('video-item')){ var wrap=container.querySelector('.video-title-wrap'); if(wrap){ wrap.parentNode.insertBefore(box,wrap); } else { title.parentNode.insertBefore(box,title); } } else { title.parentNode.insertBefore(box,title); }
       box.addEventListener('change',function(){
         if(box.checked){ store.item[key]=true; } else { delete store.item[key]; }
         save();

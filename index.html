@@ -1129,16 +1129,21 @@
     }
     function setText(id,txt){ var el=document.getElementById(id); if(el)el.textContent=txt; }
     function refresh(){
-      var totals={day:document.querySelectorAll('.od-check[data-group="day"]').length,week:document.querySelectorAll('.od-check[data-group="week"]').length,month:document.querySelectorAll('.od-check[data-group="month"]').length,six:document.querySelectorAll('.od-check[data-group="six"]').length};
-      var done={day:countDone(store.day),week:countDone(store.week),month:countDone(store.month),six:countDone(store.six)};
-      ['day','week','month','six'].forEach(function(g){
-        var t=totals[g]||0, d=Math.min(done[g],t);
-        setText('count-'+g, t? (d+' / '+t) : '—');
-        var bar=document.getElementById('bar-'+g); if(bar)bar.style.width=(t? Math.round(d/t*100):0)+'%';
-      });
-      var st=totals.six||24, sd=Math.min(done.six,st);
-      setText('overall-text', sd+' / '+st+' 周');
-      var of=document.getElementById('overall-fill'); if(of)of.style.width=Math.round(sd/st*100)+'%';
+      var odTotals={day:document.querySelectorAll('.od-check[data-group="day"]').length,week:document.querySelectorAll('.od-check[data-group="week"]').length,month:document.querySelectorAll('.od-check[data-group="month"]').length,six:document.querySelectorAll('.od-check[data-group="six"]').length};
+      var odDone={day:countDone(store.day),week:countDone(store.week),month:countDone(store.month),six:countDone(store.six)};
+      // Issue A fix: a view's bar counts its own .item-check boxes (videos /
+      // resources) in addition to its .od-check units, deduped by data-key
+      // within the view (the same item can appear in several containers).
+      // The bars are set below, AFTER the injection block, so the boxes exist.
+      function itemStats(viewId){
+        var seen={}, t=0, d=0;
+        document.querySelectorAll('#'+viewId+' .item-check').forEach(function(b){
+          var k=b.dataset.key||'';
+          if(seen[k])return; seen[k]=true; t++;
+          if(b.checked)d++;
+        });
+        return {total:t, done:d};
+      }
       function itemKeyOf(t){ return (t||'').replace(/\s+/g,' ').replace('↗','').trim(); }
     document.querySelectorAll('.video-item, .study-resource, .guide-resource, .resource-item').forEach(function(container){
       var title=null, slot=null;
@@ -1170,6 +1175,15 @@
       var idn=keys.filter(function(k){ return store.item[k]; }).length;
       setText('count-item', keys.length? (idn+' / '+keys.length) : '—');
       var ib=document.getElementById('bar-item'); if(ib)ib.style.width=(keys.length? Math.round(idn/keys.length*100):0)+'%';
+      var items={day:itemStats('day-view'),week:itemStats('week-view'),month:itemStats('month-view'),six:itemStats('six-view')};
+      ['day','week','month','six'].forEach(function(g){
+        var t=(odTotals[g]||0)+(items[g].total||0), d=Math.min((odDone[g]||0)+(items[g].done||0),t);
+        setText('count-'+g, t? (d+' / '+t) : '—');
+        var bar=document.getElementById('bar-'+g); if(bar)bar.style.width=(t? Math.round(d/t*100):0)+'%';
+      });
+      var st=((odTotals.six||0)+(items.six.total||0))||24, sd=Math.min((odDone.six||0)+(items.six.done||0),st);
+      setText('overall-text', sd+' / '+st+' 周');
+      var of=document.getElementById('overall-fill'); if(of)of.style.width=Math.round(sd/st*100)+'%';
     }
     function addCheck(el,group,id){
       if(el.querySelector(':scope > .od-check')||el.querySelector('.od-check[data-group="'+group+'"][data-id="'+id+'"]'))return;
